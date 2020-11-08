@@ -61,7 +61,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "environment": "photo_backend.jinja2.environment",
-            #'context_processors': [
+            # 'context_processors': [
             #    'autoescape': True,
             #    'django.template.context_processors.request',
             #    'django.contrib.auth.context_processors.auth',

@@ -5,8 +5,8 @@ from django.db import models
 
 
 """
-Produit de base 
-photo 
+Produit de base
+photo
 
 
 
@@ -20,9 +20,9 @@ Client:
 User:
     Utilisateur qui fait partie d'un client
     client =
-    
 
-PhotoBooth : 
+
+PhotoBooth :
     nom :
     status :
     link Client many 2 one
