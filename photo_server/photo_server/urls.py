@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+
 from photo_backend.views import first
 
 urlpatterns = [
-    path('',first),
-    path('admin/', admin.site.urls),
+    path("", first),
+    path("admin/", admin.site.urls),
 ]
