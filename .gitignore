@@ -1,0 +1,6 @@
+Lib/site-packages/
+Scripts/
+pyvenv.cfg
+*.pyc
+**/__pycache__/**
+*.sqlite3
