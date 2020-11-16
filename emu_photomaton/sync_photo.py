@@ -8,11 +8,11 @@ def calculate_checksum(filenames):
             hash.update(open(fn, "rb").read())
     return hash.hexdigest()
 
-files = ['photo1.jpg','photo2.jpg','photo3.jpg']
+files = ['photo1.jpg','photo2.jpg','photo3.jpg','photo4.jpg','photo5.jpg','photo6.jpg']
 crchash = calculate_checksum(files)
 print(crchash)
 url = 'http://127.0.0.1:8000/photo_sync/'
-values = {'sessionKey': '9ebbd0b25760557393a43064a92bae539d962103', 'IDpm': '007', 'crcfiles': crchash}
+values = {'sessionKey': '9ebbd0b25760557393a43064a92bae539d962103', 'photomatonId': 1, 'crcFiles': crchash}
 multiple_files = [(os.path.splitext(image)[0], ( image , open(image, 'rb'), 'image/jpeg')) for image in files]
 
 r = requests.post(url,data = values, files=multiple_files)

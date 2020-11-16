@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib import admin
+import pytz
 
+from django.utils import timezone
 
+paris_tz = pytz.timezone("Europe/Paris")
 
 # Create your models here.
 
@@ -57,9 +60,13 @@ class PhotoBoothAdmin(admin.ModelAdmin):
 
 
 class PhotoBooth(models.Model):
-    nom = models.CharField(max_length=50)
+    nom = models.CharField(max_length=50,blank=False)
+    sessionkey = models.CharField(max_length=64, blank=False)
     client = models.ForeignKey(Client,on_delete=models.CASCADE)
 
+    def __str__(self) :
+        return self.nom
+    
     class Meta:
         verbose_name = "Photo Booth"
 
@@ -67,6 +74,8 @@ admin.site.register(PhotoBooth)
 
 class Photo(models.Model):
     lien = models.CharField(max_length=255)
-    date_create = models.DateField(auto_now_add=True)
+    date_create = models.DateTimeField(auto_now_add=True)
     photobooth = models.ForeignKey(PhotoBooth,on_delete=models.CASCADE)
+    def __str__(self) :
+        return self.lien + " " + self.date_create.strftime("%d/%m/%Y, %H:%M:%S")
 admin.site.register(Photo)
