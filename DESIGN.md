@@ -18,9 +18,13 @@ Envoie l'image du photomaton
 #. Le client reçoit le photomaton
 
     Si il ne trouve pas de connexion internet :
-        il active le mode adhoc et affiche le SSID et le Mdp pour se connecter.
-        quand le client se connect il est dessuite renvoyer vers une page pour qu'il indique les parametre de connexion.
-        puis le photomaton redemarre.
+        regarde config créée ?
+        si oui : 
+            demarre normalement
+        si non :
+            il active le mode adhoc et affiche le SSID et le Mdp pour se connecter.
+            quand le client se connect il est dessuite renvoyer vers une page pour qu'il indique les parametre de connexion.
+            puis le photomaton redemarre.
 
 #. une fois connecter 
     Si il n'est lié a aucun client (premier utilisation)
@@ -38,11 +42,13 @@ Envoie l'image du photomaton
             il va sur la page "enregistrer mon photomaton".
             il tape le code donner sur le photomaton.
             le serveur recupere le code et regarde si il est dans la table [paillasson]
-                si oui : il crée une nouvelle ligne dans les photomaton et la lie au client.
+                si oui : 
+                    il crée une nouvelle ligne dans les photomaton et la lie au client.
                     il recupere l'id du photomaton
                     il crée une clé pour que le photomaton lui renvois les photo via des requete post
                     il envoie l'id et la clef au photomaton
                     le serveur recupere le code le lie aux client
+Synchronisation 1er
 
     Si deja connecter (a deja un id et un clé)
         si le photomaton est connecter a internet
@@ -66,7 +72,7 @@ Envoie l'image du photomaton
             il ne fais rien
         sinon :
             il essaye d'envoyer les photo avec son ID et sa clé en parametre.
-            il controle quelle sont bien envoyer 
+            il controle quelle sont bien envoyer via hash 
             il vide la liste PhotoQueue. 
             il vide le dossier.
 

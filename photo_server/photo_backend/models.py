@@ -68,5 +68,5 @@ admin.site.register(PhotoBooth)
 class Photo(models.Model):
     lien = models.CharField(max_length=255)
     date_create = models.DateField(auto_now_add=True)
-
+    photobooth = models.ForeignKey(PhotoBooth,on_delete=models.CASCADE)
 admin.site.register(Photo)
