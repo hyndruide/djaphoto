@@ -47,7 +47,7 @@ def photo_sync(request):
         crchash_local = calculate_checksum(settings.MEDIA_ROOT,filenames)
 
         if crchash_remote == crchash_local : 
-            for filename,date in zip(filenames,creates_time):
+            for filename, date in zip(filenames, creates_time):
                 print(date)
                 photo = Photo(lien = filename, date_create = datetime.datetime.fromtimestamp(float(date)), photobooth = PhotoBooth.objects.get(pk=photomaton_id))
                 photo.save()
@@ -55,6 +55,6 @@ def photo_sync(request):
 
         else : 
             for filename in filenames : 
-                os.remove(os.path.join(path,filename))
+                os.remove(os.path.join(path, filename))
             return  HttpResponseBadRequest()
 

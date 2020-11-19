@@ -57,9 +57,9 @@ class PhotoBoothAdmin(admin.ModelAdmin):
 
 class PhotoBooth(models.Model):
 
-    nom = models.CharField(max_length=50,blank=False)
+    nom = models.CharField(max_length=50, blank=False)
     sessionkey = models.CharField(max_length=64, blank=False)
-    client = models.ForeignKey(Client,on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
 
     def __str__(self) :
