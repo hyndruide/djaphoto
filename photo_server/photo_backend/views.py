@@ -4,19 +4,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from .models import Client,PhotoBooth,Photo
+from . utils import calculate_checksum
+import json
 import datetime
-import hashlib
 import os
 
 
-def calculate_checksum(path,filenames):
-    hash = hashlib.md5()
-    for fn in filenames:
-        fn = os.path.join(path,fn)
-
-        if os.path.isfile(fn):
-            hash.update(open(fn, "rb").read())
-    return hash.hexdigest()
 
 # Create your views here.
 
@@ -34,6 +27,8 @@ def photo_sync(request):
 
         photomaton_id = request.POST.get('photomatonId')
         session_key = request.POST.get('sessionKey')
+        creates_time = request.POST.getlist('creates_time')
+        print(creates_time)
         photomaton = PhotoBooth.objects.get(pk=photomaton_id)
         if photomaton.sessionkey != session_key :
             return  HttpResponseForbidden()
@@ -49,8 +44,9 @@ def photo_sync(request):
         crchash_local = calculate_checksum(settings.MEDIA_ROOT,filenames)
 
         if crchash_remote == crchash_local : 
-            for filename in filenames:
-                photo = Photo(lien = filename, photobooth = PhotoBooth.objects.get(pk=photomaton_id))
+            for filename,date in zip(filenames,creates_time):
+                print(date)
+                photo = Photo(lien = filename, date_create = datetime.datetime.fromtimestamp(float(date)), photobooth = PhotoBooth.objects.get(pk=photomaton_id))
                 photo.save()
             return HttpResponse()
 
