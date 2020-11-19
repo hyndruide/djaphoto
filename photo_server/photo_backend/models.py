@@ -2,8 +2,6 @@ from django.contrib import admin
 from django.db import models
 
 # Create your models here.
-
-
 """
 Produit de base
 photo
@@ -53,8 +51,13 @@ class PhotoBoothAdmin(admin.ModelAdmin):
 
 
 class PhotoBooth(models.Model):
-    nom = models.CharField(max_length=50)
+
+    nom = models.CharField(max_length=50, blank=False)
+    sessionkey = models.CharField(max_length=64, blank=False)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nom
 
     class Meta:
         verbose_name = "Photo Booth"
@@ -65,7 +68,12 @@ admin.site.register(PhotoBooth)
 
 class Photo(models.Model):
     lien = models.CharField(max_length=255)
-    date_create = models.DateField(auto_now_add=True)
+    date_upload = models.DateTimeField(auto_now_add=True)
+    date_create = models.DateTimeField(blank=False)
+    photobooth = models.ForeignKey(PhotoBooth, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.lien + " " + self.date_create.strftime("%d/%m/%Y, %H:%M:%S")
 
 
 admin.site.register(Photo)
