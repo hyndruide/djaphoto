@@ -5,7 +5,7 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from .models import Client,PhotoBooth,Photo
 from . utils import calculate_checksum
-import json
+
 import datetime
 import os
 
