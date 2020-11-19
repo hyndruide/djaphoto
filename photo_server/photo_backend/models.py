@@ -1,5 +1,7 @@
-from django.db import models
 from django.contrib import admin
+
+from django.db import models
+
 
 
 # Create your models here.
@@ -67,6 +69,7 @@ class PhotoBooth(models.Model):
 
 
 admin.site.register(PhotoBooth)
+
 
 class Photo(models.Model):
     lien = models.CharField(max_length=255)
