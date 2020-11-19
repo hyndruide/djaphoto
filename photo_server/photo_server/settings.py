@@ -120,11 +120,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
+LANGUAGE_CODE = "fr"
 
-LANGUAGE_CODE = 'fr'
-
-TIME_ZONE = 'Europe/Paris'
-
+TIME_ZONE = "Europe/Paris"
 
 USE_I18N = True
 
@@ -139,11 +137,9 @@ USE_TZ = True
 STATICFILES_DIRS = [
     BASE_DIR / "photo_backend" / "static",
 ]
+STATIC_URL = "/static/"
 
-STATIC_URL = '/static/'
+# Upload directory
 
-# Upload directory 
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"

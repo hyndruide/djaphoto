@@ -1,4 +1,3 @@
-
 import datetime
 import os
 
@@ -10,8 +9,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import Photo, PhotoBooth
 from .utils import calculate_checksum
-
-
 
 # Create your views here.
 
