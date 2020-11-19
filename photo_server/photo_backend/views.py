@@ -29,14 +29,14 @@ def first(request):
 @csrf_exempt
 def photo_sync(request):
     filenames = []
-    if request.method == "POST": 
+    if request.method == "POST":
         photomaton_id = request.POST.get("photomatonId")
         session_key = request.POST.get("sessionKey")
         creates_time = request.POST.getlist("creates_time")
         print(creates_time)
-        photomaton = PhotoBooth.objects.get(pk=photomaton_id)        
+        photomaton = PhotoBooth.objects.get(pk=photomaton_id)
         if photomaton.sessionkey != session_key:
-            return  HttpResponseForbidden()
+            return HttpResponseForbidden()
 
         crchash_remote = request.POST.get("crcFiles")
 
@@ -48,7 +48,7 @@ def photo_sync(request):
             filenames.append(filename)
         crchash_local = calculate_checksum(settings.MEDIA_ROOT, filenames)
 
-        if crchash_remote == crchash_local: 
+        if crchash_remote == crchash_local:
             for filename, date in zip(filenames, creates_time):
                 print(date)
                 photo = Photo(
@@ -58,8 +58,8 @@ def photo_sync(request):
                 )
                 photo.save()
             return HttpResponse()
-        else: 
-            for filename in filenames: 
+        else:
+            for filename in filenames:
                 os.remove(os.path.join(path, filename))
-            return  HttpResponseBadRequest()
+            return HttpResponseBadRequest()
 
