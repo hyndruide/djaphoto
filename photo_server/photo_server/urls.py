@@ -21,4 +21,5 @@ urlpatterns = [
     path('', first),
     path('photo_sync/', photo_sync),
     path('admin/', admin.site.urls),
+
 ]

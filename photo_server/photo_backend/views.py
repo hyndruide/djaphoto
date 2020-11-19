@@ -1,3 +1,4 @@
+
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
@@ -10,6 +11,8 @@ import datetime
 import os
 
 
+
+from django.shortcuts import render
 
 # Create your views here.
 
@@ -54,3 +57,4 @@ def photo_sync(request):
             for filename in filenames : 
                 os.remove(os.path.join(path,filename))
             return  HttpResponseBadRequest()
+
