@@ -1,3 +1,4 @@
+
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
@@ -5,11 +6,13 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from .models import Client,PhotoBooth,Photo
 from . utils import calculate_checksum
-import json
+
 import datetime
 import os
 
 
+
+from django.shortcuts import render
 
 # Create your views here.
 
@@ -54,3 +57,4 @@ def photo_sync(request):
             for filename in filenames : 
                 os.remove(os.path.join(path,filename))
             return  HttpResponseBadRequest()
+
