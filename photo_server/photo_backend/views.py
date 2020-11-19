@@ -42,7 +42,6 @@ def photo_sync(request):
 
         if crchash_remote == crchash_local:
             for filename, date in zip(filenames, creates_time):
-                print(date)
                 photo = Photo(
                     lien=filename,
                     date_create=datetime.datetime.fromtimestamp(float(date)),

@@ -6,3 +6,4 @@ pyvenv.cfg
 *.sqlite3
 .vscode/
 .venv/
+htmlcov/

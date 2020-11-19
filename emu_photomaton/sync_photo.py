@@ -13,7 +13,7 @@ def calculate_checksum(filenames):
 
 
 files = ["photo1.jpg", "photo2.jpg", "photo3.jpg", "photo4.jpg", "photo5.jpg", "photo6.jpg"]
-creates_time = [os.path.getctime(file) for file in files]
+creates_time = [int(os.path.getctime(file)) for file in files]
 crchash = calculate_checksum(files)
 print(crchash)
 url = "http://127.0.0.1:8000/photo_sync/"
