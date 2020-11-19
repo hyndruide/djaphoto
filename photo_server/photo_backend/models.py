@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib import admin
-import pytz
 
-from django.utils import timezone
 
 # Create your models here.
 
@@ -61,10 +59,9 @@ class PhotoBooth(models.Model):
     sessionkey = models.CharField(max_length=64, blank=False)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
-
     def __str__(self) :
         return self.nom
-    
+
     class Meta:
         verbose_name = "Photo Booth"
 
@@ -76,8 +73,10 @@ class Photo(models.Model):
     lien = models.CharField(max_length=255)
     date_upload = models.DateTimeField(auto_now_add=True)
     date_create = models.DateTimeField(blank=False)
-    photobooth = models.ForeignKey(PhotoBooth,on_delete=models.CASCADE)
-    def __str__(self) :
+    photobooth = models.ForeignKey(PhotoBooth, on_delete=models.CASCADE)
+    
+    def __str__(self):
         return self.lien + " " + self.date_create.strftime("%d/%m/%Y, %H:%M:%S")
 
 admin.site.register(Photo)
+
