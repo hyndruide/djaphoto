@@ -25,6 +25,7 @@ testpaths = [
     "photo_server/manage.py",
     "photo_server/photo_backend",
     "photo_server/photo_server",
+    "emu_photomaton"
 ]
 
 [tool.isort]
