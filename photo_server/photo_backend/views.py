@@ -4,15 +4,11 @@ import os
 
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from django.http import (
-    HttpResponse,
-    HttpResponseBadRequest,
-    HttpResponseForbidden,
-)
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import PhotoBooth, Photo
+from .models import Photo, PhotoBooth
 from .utils import calculate_checksum
 
 
@@ -59,5 +55,5 @@ def photo_sync(request):
             return HttpResponse()
         else:
             for filename in filenames:
-                os.remove(os.path.join(path, filename))
+                os.remove(os.path.join(settings.MEDIA_ROOT, filename))
             return HttpResponseBadRequest()
