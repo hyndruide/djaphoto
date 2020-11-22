@@ -16,10 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from photo_backend.views import first, photo_sync
+from photo_backend.views import first, photo_upload
 
 urlpatterns = [
     path("", first),
-    path("photo_sync/", photo_sync),
+    path("photo/upload", photo_upload),
     path("admin/", admin.site.urls),
 ]

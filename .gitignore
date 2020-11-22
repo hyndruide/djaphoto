@@ -3,7 +3,10 @@ Scripts/
 pyvenv.cfg
 *.pyc
 **/__pycache__/**
-*.sqlite3
 .vscode/
 .venv/
 htmlcov/
+
+# runtime
+photo_server/media/
+*.sqlite3
