@@ -7,6 +7,7 @@ import pytest
 def test_sync_photo(client, init_db):
 
     key = "supersecret123"
+    auth = f"bearer {key}"
 
     filename = "photo_server/emu_photomaton/photo1.jpg"
     with open(filename, "rb") as fp:
@@ -20,5 +21,5 @@ def test_sync_photo(client, init_db):
             "file": fp,
         }
 
-        response = client.post("/photo/upload", data, HTTP_AUTHORIZATION=key)
+        response = client.post("/photo/upload", data, HTTP_AUTHORIZATION=auth)
         assert 201 == response.status_code

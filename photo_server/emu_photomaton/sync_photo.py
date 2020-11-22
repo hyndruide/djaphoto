@@ -31,7 +31,9 @@ class BoothClient:
                 "checksum": self._checksum(fp),
                 "created_at": self._now().isoformat(),
             }
-            headers = {"Authorization": self.session_key}
+            headers = {
+                "Authorization": f"bearer {self.session_key}",
+            }
 
             url = f"{self.url}/photo/upload"
 

@@ -1,5 +1,8 @@
 import io
 
+import pytest
+from django.core.exceptions import PermissionDenied
+
 from photo_backend import utils
 
 
@@ -28,3 +31,24 @@ def test_verify_checkum_bad_inputs():
 
     assert not utils.verify_checksum(expected, fp)
     assert pos == fp.tell()
+
+
+def test_get_session_key_failure(rf):
+    url = "/"  # we don't care about the URL in this test
+
+    request = rf.get(url)
+    with pytest.raises(PermissionDenied):
+        utils.get_session_key(request)
+
+    request = rf.get("/", HTTP_AUTHORIZATION="foobar")
+    with pytest.raises(PermissionDenied):
+        utils.get_session_key(request)
+
+    request = rf.get("/", HTTP_AUTHORIZATION="bearer")
+    with pytest.raises(PermissionDenied):
+        utils.get_session_key(request)
+
+
+def test_get_session_key_success(rf):
+    request = rf.get("/", HTTP_AUTHORIZATION="bearer toto")
+    assert "toto" == utils.get_session_key(request)

@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from .models import Photo, PhotoBooth
-from .utils import verify_checksum
+from .utils import get_session_key, verify_checksum
 
 # Create your views here.
 
@@ -20,7 +20,7 @@ def first(request):
 @csrf_exempt
 @require_http_methods(["POST"])
 def photo_upload(request):
-    session_key = request.headers["Authorization"]  # TODO: check if authorization is here
+    session_key = get_session_key(request)
     photomaton = get_object_or_404(PhotoBooth, sessionkey=session_key)
 
     # TODO: should use a Django Form to validate inputs

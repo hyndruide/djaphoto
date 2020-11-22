@@ -1,6 +1,8 @@
 import hashlib
 import os
 
+from django.core.exceptions import PermissionDenied
+
 
 def calculate_checksum(path, filenames):
     hash = hashlib.md5()
@@ -25,3 +27,11 @@ def verify_checksum(checksum, fp):
     computed = hashlib.sha1(fp.read()).hexdigest()
     fp.seek(pos)
     return expected == computed
+
+
+def get_session_key(request):
+    authorization = request.headers.get("authorization", "")
+    if authorization.startswith("bearer "):
+        return authorization.split(" ", 1)[1]
+    else:
+        raise PermissionDenied
