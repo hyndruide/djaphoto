@@ -27,8 +27,6 @@ def photo_upload(request):
     checksum = request.POST["checksum"]
     fp = request.FILES["file"]
 
-    print(f"size = {fp.size}")
-
     if not verify_checksum(checksum, fp):
         return HttpResponseBadRequest("invalid checksum")
 

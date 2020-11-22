@@ -8,7 +8,7 @@ def test_sync_photo(client, init_db):
 
     key = "supersecret123"
 
-    filename = "emu_photomaton/photo1.jpg"
+    filename = "photo_server/emu_photomaton/photo1.jpg"
     with open(filename, "rb") as fp:
         checksum = hashlib.sha1(fp.read()).hexdigest()
 
