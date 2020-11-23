@@ -8,6 +8,8 @@ authors = ["Ulric Denis <denis.ulric@gmail.com>"]
 python = "^3.7"
 Django = "^3.1.3"
 Jinja2 = "^2.11.2"
+pytest-django = "^4.1.0"
+requests = "^2.25.0"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.6.0"
@@ -21,11 +23,13 @@ pytest-isort = "^1.2.0"
 
 [tool.pytest.ini_options]
 addopts = "--cov photo_server --cov-report term --cov-report html --tb short --flake8 --black --isort --ignore=photo_server/photo_backend/migrations"
+DJANGO_SETTINGS_MODULE = "tests.settings"
 testpaths = [
     "photo_server/manage.py",
     "photo_server/photo_backend",
     "photo_server/photo_server",
-    "emu_photomaton"
+    "photo_server/tests",
+    "photo_server/emu_photomaton",
 ]
 
 [tool.isort]
