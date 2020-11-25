@@ -6,9 +6,11 @@ import requests
 
 
 class BoothClient:
-    def __init__(self, url, session_key):
+    def __init__(self, url, session_key=None):
         self.url = url
-        self.session_key = session_key
+        if session_key != None : 
+            self.session_key = session_key
+
 
     @staticmethod
     def _checksum(fp):
@@ -18,18 +20,22 @@ class BoothClient:
         fp.seek(pos)
         return f"{hash}:{checksum}"
 
-    @staticmethod
-    def _now():
-        d = datetime.utcnow()
-        d = d.replace(tzinfo=timezone.utc)
-        return d
+
+#revoir pour avoir la date de creation du fichier
+    def _now(self,filename):
+        
+        dt = os.path.getctime(filename)
+        dt = datetime.utcfromtimestamp(dt)
+        dt = dt.replace(tzinfo=timezone.utc)
+        return dt
 
     def upload(self, filename):
+        
         with open(filename, "rb") as fp:
             data = {
                 "name": os.path.basename(filename),
                 "checksum": self._checksum(fp),
-                "created_at": self._now().isoformat(),
+                "created_at": self._now(filename).isoformat(),
             }
             headers = {
                 "Authorization": f"bearer {self.session_key}",

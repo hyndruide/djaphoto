@@ -73,7 +73,11 @@ class Photo(models.Model):
     photobooth = models.ForeignKey(PhotoBooth, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.lien + " " + self.date_create.strftime("%d/%m/%Y, %H:%M:%S")
+        import pytz
+
+        local_tz = pytz.timezone("Europe/Paris")
+        when = self.date_create.astimezone(local_tz).strftime("%d/%m/%Y, %H:%M:%S %Z")
+        return self.lien + " " + when
 
 
 admin.site.register(Photo)

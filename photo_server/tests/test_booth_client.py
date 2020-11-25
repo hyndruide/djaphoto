@@ -12,3 +12,7 @@ def test_send_file(live_server, init_db):
     res = client.upload("photo_server/emu_photomaton/photo1.jpg")
 
     assert "id" in res
+
+
+# TO DO def test_setup_photomaton(live_server, init_db):
+

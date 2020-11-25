@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
+from .forms import UploadForm
 from .models import Photo, PhotoBooth
 from .utils import get_session_key, verify_checksum
 
@@ -23,23 +24,32 @@ def photo_upload(request):
     session_key = get_session_key(request)
     photomaton = get_object_or_404(PhotoBooth, sessionkey=session_key)
 
+    form = UploadForm(request.POST, request.FILES)
+    if form.is_valid():
+        checksum = form.cleaned_data["checksum"]
+        fp = request.FILES["file"]
+        created_at = form.cleaned_data["created_at"]
+        name = form.cleaned_data["name"]
+
     # TODO: should use a Django Form to validate inputs
-    checksum = request.POST["checksum"]
-    fp = request.FILES["file"]
 
-    if not verify_checksum(checksum, fp):
-        return HttpResponseBadRequest("invalid checksum")
 
-    fs = FileSystemStorage()
-    filename = fs.save(request.POST["name"], fp)
+        if not verify_checksum(checksum, fp):
+            return HttpResponseBadRequest("invalid checksum")
 
-    photo = Photo(
-        lien=filename,
-        date_create=request.POST["created_at"],
-        photobooth=photomaton,
-    )
-    photo.save()
+        fs = FileSystemStorage(name)
+        filename = fs.save(name, fp)
 
-    response = JsonResponse({"id": photo.id})
-    response.status_code = 201  # Created
-    return response
+        photo = Photo(
+            lien=filename,
+            date_create=created_at,
+            photobooth=photomaton,
+        )
+        photo.save()
+
+        response = JsonResponse({"id": photo.id})
+        response.status_code = 201  # Created
+        return response
+    else :
+        return HttpResponseBadRequest(form.errors)
+    
