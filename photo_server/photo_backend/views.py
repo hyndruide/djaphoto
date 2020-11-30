@@ -18,8 +18,13 @@ def first(request):
     return render(request, "index.html", {"now": now})
 
 
+@csrf_exempt
 def connexion(request):
-    pass
+    session_key = get_session_key(request)
+    get_object_or_404(PhotoBooth, sessionkey=session_key)
+    response = JsonResponse({"valid": True})
+    response.status_code = 200  # Created
+    return response
 
 
 def new_connexion(request):

@@ -66,13 +66,16 @@ class BoothClient:
 
     def connect(self):
         if self.update_session_key() is False:
-            data = self._first_connect(self)
-            return data
+            return False
         url = f"{self.url}/connexion"
-        with requests.get(url) as r:
+        headers = {
+            "Authorization": f"bearer {self.session_key}",
+        }
+
+        with requests.post(url, headers=headers) as r:
             if not r.ok:
                 raise ValueError(r.text)
-            return True
+            return r.json()
 
     def store_key(self, key):
         with open('keyfile', 'wb') as f1:
