@@ -1,7 +1,15 @@
 import hashlib
+import random
+import string
 import os
 
 from django.core.exceptions import PermissionDenied
+
+
+def get_random_string(length):
+    letters = string.ascii_lowercase
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    return result_str
 
 
 def calculate_checksum(path, filenames):
@@ -35,3 +43,12 @@ def get_session_key(request):
         return authorization.split(" ", 1)[1]
     else:
         raise PermissionDenied
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip

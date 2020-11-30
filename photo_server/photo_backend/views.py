@@ -7,8 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from .forms import UploadForm
-from .models import Photo, PhotoBooth
-from .utils import get_session_key, verify_checksum
+from .models import Photo, PhotoBooth, Paillasson
+from .utils import get_session_key, verify_checksum, get_client_ip, get_random_string
 
 # Create your views here.
 
@@ -16,6 +16,42 @@ from .utils import get_session_key, verify_checksum
 def first(request):
     now = datetime.datetime.now()
     return render(request, "index.html", {"now": now})
+
+
+def connexion(request):
+    pass
+
+
+def new_connexion(request):
+    ip_remote = get_client_ip(request)
+    new_code_connexion = get_random_string(8)
+    patient = Paillasson(
+        ip=ip_remote,
+        code_connexion=new_code_connexion,
+        is_valid=False,
+    )
+    patient.save()
+    response = JsonResponse({"code_connexion": patient.code_connexion})
+    response.status_code = 201  # Created
+    return response
+
+
+@csrf_exempt
+def wait_connexion(request):
+    ip_remote = get_client_ip(request)
+    code_connexion = get_session_key(request)
+    patient = get_object_or_404(Paillasson, code_connexion=code_connexion, ip=ip_remote)
+    if patient.is_valid is True:
+        new_session_key = get_random_string(64)
+        photomaton = PhotoBooth(
+            nom="nouveau_photomaton",
+            sessionkey=new_session_key,
+            client=patient.client,
+        )
+        photomaton.save()
+    response = JsonResponse({"is_valid": True, "session_key": photomaton.sessionkey})
+    response.status_code = 201  # Created
+    return response
 
 
 @csrf_exempt

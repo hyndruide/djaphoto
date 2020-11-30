@@ -6,12 +6,6 @@ from django.db import models
 Produit de base
 photo
 
-
-
-
-
-
-
 Client:
     Entreprise, association, famille
 
@@ -64,6 +58,16 @@ class PhotoBooth(models.Model):
 
 
 admin.site.register(PhotoBooth)
+
+
+class Paillasson(models.Model):
+    ip = models.CharField(max_length=255)
+    code_connexion = models.CharField(max_length=255)
+    is_valid = models.BooleanField(default=False)
+    client = models.ForeignKey(Client, null=True, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.ip + self.is_valid
 
 
 class Photo(models.Model):
