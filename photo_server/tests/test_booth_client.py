@@ -25,7 +25,6 @@ def test_send_file(live_server, init_db):
     session_key = "supersecret123"
     client = BoothClient(url)
     client.store_key(session_key)
-    client.update_session_key()
     res = client.upload("photo_server/emu_photomaton/photo1.jpg")
 
     assert "id" in res
