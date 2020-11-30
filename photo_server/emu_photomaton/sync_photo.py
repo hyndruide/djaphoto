@@ -2,7 +2,7 @@ import hashlib
 import os
 from datetime import datetime, timezone
 import time
-import pickle
+import json
 import requests
 
 
@@ -77,14 +77,15 @@ class BoothClient:
             return r.json()
 
     def store_key(self, key):
-        with open('keyfile', 'wb') as f1:
-            pickle.dump(key, f1)
+        session_key = {"key": key}
+        with open('keyfile', 'w') as f1:
+            json.dump(session_key, f1)
         self.update_session_key()
 
     def _get_key(self):
         if os.path.isfile('keyfile'):
-            with open('keyfile', 'rb') as key:
-                return pickle.load(key)
+            with open('keyfile', 'r') as key:
+                return json.load(key)['key']
         else:
             return None
 

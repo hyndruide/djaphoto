@@ -27,7 +27,9 @@ def test_first_validate_connect(live_server, init_db_validate_photobooth):
     client = BoothClient(url)
     client.wait_first_connect("azertyui")
     res = client.connect()
-    assert "valid" in res
+
+    assert res == {"valid": True}
+    assert res["valid"] 
 
 
 @pytest.mark.django_db
