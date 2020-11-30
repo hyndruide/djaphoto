@@ -67,7 +67,10 @@ class Paillasson(models.Model):
     client = models.ForeignKey(Client, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.ip + self.is_valid
+        return self.ip + str(self.is_valid)
+
+
+admin.site.register(Paillasson)
 
 
 class Photo(models.Model):

@@ -1,13 +1,13 @@
 import hashlib
 import os
 from datetime import datetime, timezone
-
+import time
 import pickle
 import requests
 
 
 class BoothClient:
-    def __init__(self, url):
+    def __init__(self, url='http://127.0.0.1:8000'):
         self.url = url
         self.session_key = None
 
@@ -58,11 +58,10 @@ class BoothClient:
             }
         with requests.post(url, headers=headers) as r:
             if not r.ok:
-                raise ValueError(r.text)
+                return True
             if r.json()['is_valid'] is True:
                 self.store_key(r.json()['session_key'])
                 return False
-            return not r.json()['is_valid']
 
     def connect(self):
         if self.update_session_key() is False:
@@ -94,3 +93,12 @@ class BoothClient:
         if session_key is None:
             return False
         self.session_key = session_key
+
+
+if __name__ == "__main__":
+    photo = BoothClient()
+    r = photo._first_connect()
+    print(r['code_connexion'])
+    while photo.wait_first_connect(r['code_connexion']):
+        time.sleep(3)
+    print("photomaton validé")

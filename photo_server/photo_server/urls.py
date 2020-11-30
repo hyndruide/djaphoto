@@ -16,7 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from photo_backend.views import first, photo_upload, connexion, new_connexion, wait_connexion
+from photo_backend.views import (
+    first,
+    photo_upload,
+    connexion,
+    new_connexion,
+    wait_connexion,
+    validate_connexion
+)
+
 
 urlpatterns = [
     path("", first),
@@ -24,5 +32,6 @@ urlpatterns = [
     path("connexion/", connexion),
     path("connexion/new", new_connexion),
     path("connexion/wait", wait_connexion),
+    path("photobooth/validate/", validate_connexion),
     path("admin/", admin.site.urls),
 ]

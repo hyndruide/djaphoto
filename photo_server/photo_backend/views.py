@@ -1,13 +1,13 @@
 import datetime
 
 from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponseBadRequest, JsonResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from .forms import UploadForm
-from .models import Photo, PhotoBooth, Paillasson
+from .forms import UploadForm, ValidateBooth
+from .models import Client, Photo, PhotoBooth, Paillasson
 from .utils import get_session_key, verify_checksum, get_client_ip, get_random_string
 
 # Create your views here.
@@ -41,20 +41,36 @@ def new_connexion(request):
     return response
 
 
+def validate_connexion(request):
+    if request.method == 'POST':
+        form = ValidateBooth(request.POST)
+        if form.is_valid():
+            patient = get_object_or_404(Paillasson, code_connexion=form.cleaned_data['Code'])
+            patient.is_valid = True
+            patient.save()
+
+            return HttpResponseRedirect('/')
+    else:
+        form = ValidateBooth()
+
+    return render(request, 'form.html', {'form': form})
+
 @csrf_exempt
 def wait_connexion(request):
     ip_remote = get_client_ip(request)
     code_connexion = get_session_key(request)
     patient = get_object_or_404(Paillasson, code_connexion=code_connexion, ip=ip_remote)
-    if patient.is_valid is True:
-        new_session_key = get_random_string(64)
-        photomaton = PhotoBooth(
-            nom="nouveau_photomaton",
-            sessionkey=new_session_key,
-            client=patient.client,
-        )
-        photomaton.save()
-        patient.delete()
+    if not patient.is_valid:
+        return HttpResponseForbidden()
+
+    new_session_key = get_random_string(64)
+    photomaton = PhotoBooth(
+        nom="nouveau_photomaton",
+        sessionkey=new_session_key,
+        client=Client.objects.get(pk=1),
+    )
+    photomaton.save()
+    patient.delete()
     response = JsonResponse({"is_valid": True, "session_key": photomaton.sessionkey})
     response.status_code = 201  # Created
     return response
