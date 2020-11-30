@@ -15,4 +15,3 @@ def test_send_file(live_server, init_db):
 
 
 # TO DO def test_setup_photomaton(live_server, init_db):
-

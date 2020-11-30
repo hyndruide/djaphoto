@@ -26,14 +26,12 @@ def photo_upload(request):
 
     form = UploadForm(request.POST, request.FILES)
     if form.is_valid():
+        fp = form.cleaned_data["file"]
         checksum = form.cleaned_data["checksum"]
-        fp = request.FILES["file"]
         created_at = form.cleaned_data["created_at"]
         name = form.cleaned_data["name"]
 
     # TODO: should use a Django Form to validate inputs
-
-
         if not verify_checksum(checksum, fp):
             return HttpResponseBadRequest("invalid checksum")
 
@@ -50,6 +48,5 @@ def photo_upload(request):
         response = JsonResponse({"id": photo.id})
         response.status_code = 201  # Created
         return response
-    else :
+    else:
         return HttpResponseBadRequest(form.errors)
-    

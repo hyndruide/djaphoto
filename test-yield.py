@@ -28,23 +28,20 @@ def list_paragraph(fp):
             all_paragraphs.append(value)
             # process value
             paragraph = []
-        
         else:
             paragraph.append(line)
-       
     return all_paragraphs
 
 
 def list_paragraph2(fp):
     paragraph = []
-    
     for line in fp:
         line = line.rstrip()
         if line == "":
             value = "\n".join(paragraph)
             yield value
             # process value
-            paragraph = []    
+            paragraph = []
         else:
             paragraph.append(line)
 

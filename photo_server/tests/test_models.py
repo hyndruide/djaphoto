@@ -3,7 +3,6 @@ import pytest
 from photo_backend import models
 
 
-
 @pytest.mark.django_db
 def test_photo_str():
 

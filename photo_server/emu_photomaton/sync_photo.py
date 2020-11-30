@@ -8,9 +8,8 @@ import requests
 class BoothClient:
     def __init__(self, url, session_key=None):
         self.url = url
-        if session_key != None : 
+        if session_key is not None:
             self.session_key = session_key
-
 
     @staticmethod
     def _checksum(fp):
@@ -20,17 +19,14 @@ class BoothClient:
         fp.seek(pos)
         return f"{hash}:{checksum}"
 
-
-#revoir pour avoir la date de creation du fichier
-    def _now(self,filename):
-        
+    # revoir pour avoir la date de creation du fichier
+    def _now(self, filename):
         dt = os.path.getctime(filename)
         dt = datetime.utcfromtimestamp(dt)
         dt = dt.replace(tzinfo=timezone.utc)
         return dt
 
     def upload(self, filename):
-        
         with open(filename, "rb") as fp:
             data = {
                 "name": os.path.basename(filename),
