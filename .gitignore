@@ -7,6 +7,12 @@ pyvenv.cfg
 .venv/
 htmlcov/
 
+
 # runtime
 photo_server/media/
 *.sqlite3
+keyfile
+.coverage
+ma-photo1.jpg/
+photo1.jpg/
+

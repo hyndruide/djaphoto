@@ -54,6 +54,7 @@ def wait_connexion(request):
             client=patient.client,
         )
         photomaton.save()
+        patient.delete()
     response = JsonResponse({"is_valid": True, "session_key": photomaton.sessionkey})
     response.status_code = 201  # Created
     return response
