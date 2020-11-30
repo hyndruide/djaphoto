@@ -32,8 +32,9 @@ Envoie l'image du photomaton
         une fois connecter le photomaton redemarre
 
         # connexion du photomaton au server
-            requete Socket.io via le photomaton au serveur.
-            le serveur accepte au Socket et crée un code a 8 caratere (minuscule majuscule) qu'il stock dans une table temporaire (table : paillasson) avec l'id du photomaton
+            requete via le photomaton au serveur.
+            le serveur accepte la requete crée un code a 8 caratere (minuscule majuscule) qu'il stock dans une table temporaire (table : paillasson) avec l'IP du photomaton, un boolean is_valid qui sera True quand quelqu'un certifira le Photomaton, et une plage client pour l'instant NULL
+
             le serveur renvoi un message sur le photomaton avec le code
             le photomaton affiche le code avec un message connect toi et tape le code ...
             le photomaton est a attente d'une reponse 
@@ -41,13 +42,15 @@ Envoie l'image du photomaton
         # le client se connecte sur sont compte :
             il va sur la page "enregistrer mon photomaton".
             il tape le code donner sur le photomaton.
-            le serveur recupere le code et regarde si il est dans la table [paillasson]
-                si oui : 
-                    il crée une nouvelle ligne dans les photomaton et la lie au client.
-                    il recupere l'id du photomaton
-                    il crée une clé pour que le photomaton lui renvois les photo via des requete post
-                    il envoie l'id et la clef au photomaton
-                    le serveur recupere le code le lie aux client
+
+        # retour sur le photomaton :
+            Celui-ci remarque la validation du serveur 
+            Recupere la Session_key pour la stocker dans un fichier pickle
+        
+        # Le client a maintenant accés a son photomaton sur ca page :
+            il peut choisir le nom de son photomaton
+            Le template d'affichage ...
+
 Synchronisation 1er
 
     Si deja connecter (a deja un id et un clé)
