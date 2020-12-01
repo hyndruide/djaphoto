@@ -1,15 +1,18 @@
 import hashlib
 import os
 from datetime import datetime, timezone
-
+import time
+import json
 import requests
+import random
+import string
 
 
 class BoothClient:
-    def __init__(self, url, session_key=None):
+    def __init__(self, url='http://127.0.0.1:8000'):
         self.url = url
-        if session_key is not None:
-            self.session_key = session_key
+        self.token = None
+        self.client_id = self._get_client_id()
 
     @staticmethod
     def _checksum(fp):
@@ -19,7 +22,12 @@ class BoothClient:
         fp.seek(pos)
         return f"{hash}:{checksum}"
 
-    # revoir pour avoir la date de creation du fichier
+    @staticmethod
+    def _get_random_string(length):
+        letters = string.ascii_lowercase
+        result_str = ''.join(random.choice(letters) for i in range(length))
+        return result_str
+
     def _now(self, filename):
         dt = os.path.getctime(filename)
         dt = datetime.utcfromtimestamp(dt)
@@ -27,6 +35,8 @@ class BoothClient:
         return dt
 
     def upload(self, filename):
+        if self.update_token() is False:
+            return False
         with open(filename, "rb") as fp:
             data = {
                 "name": os.path.basename(filename),
@@ -34,7 +44,7 @@ class BoothClient:
                 "created_at": self._now(filename).isoformat(),
             }
             headers = {
-                "Authorization": f"bearer {self.session_key}",
+                "Authorization": f"{self.token['token_type']} {self.token['access_token']}",
             }
 
             url = f"{self.url}/photo/upload"
@@ -44,3 +54,83 @@ class BoothClient:
                 if not r.ok:
                     raise ValueError(r.text)
                 return r.json()
+
+    def _first_connect(self):
+        url = f"{self.url}/photobooth/new"
+        data = {
+            "client_id": self.client_id,
+        }
+        with requests.post(url, data=data) as r:
+            if not r.ok:
+                raise ValueError(r.text)
+            return r.json()
+
+    def wait_first_connect(self, data):
+        url = f"{self.url}/photobooth/wait"
+        dt = {
+                "grant_type": "",
+                "client_id": self.client_id,
+                "device_code": data['device_code']
+            }
+        with requests.post(url, data=dt) as r:
+            if not r.ok:
+                print(r.text)
+                return True
+      
+            self.store_token(r.json())
+            return False
+
+    def connect(self):
+        if self.update_token() is False:
+            return False
+        url = f"{self.url}/photobooth/connect"
+        headers = {
+            "Authorization": f"{self.token['token_type']} {self.token['access_token']}",
+        }
+
+        with requests.post(url, headers=headers) as r:
+            if not r.ok:
+                raise ValueError(r.text)
+            return r.json()
+
+    def store_token(self, token):
+        with open('setting', 'r') as f1:
+            setting_file = json.load(f1)
+        setting_file['token'] = token
+        with open('setting', 'w') as f1:
+            json.dump(setting_file, f1)
+        self.update_token()
+
+    def _get_token(self):
+        if os.path.isfile('setting'):
+            with open('setting', 'r') as f1:
+                setting_file = json.load(f1)
+                if 'token' not in setting_file:
+                    return None
+                return setting_file['token']
+        else:
+            return None
+
+    def _get_client_id(self):
+        if os.path.isfile('setting'):
+            with open('setting', 'r') as f1:
+                return json.load(f1)['client_id']
+        else:
+            client_id = {"client_id": self._get_random_string(8)}
+            with open('setting', 'w') as f1:
+                json.dump(client_id, f1)
+
+    def update_token(self):
+        token = self._get_token()
+        if token is None:
+            return False
+        self.token = token
+
+
+if __name__ == "__main__":
+    photo = BoothClient()
+    r = photo._first_connect()
+    print(r)
+    while photo.wait_first_connect(r):
+        time.sleep(r['interval'])
+    print("photomaton validé")

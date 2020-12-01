@@ -9,7 +9,7 @@ def test_photo_str():
     date = datetime(2020, 11, 23, 21, 16, 00, tzinfo=timezone.utc)
 
     c = models.Client(nom="client")
-    pb = models.PhotoBooth(nom="pb", client=c, sessionkey="kqslmqsk")
+    pb = models.PhotoBooth(nom="pb", client=c)
 
     c.save()
     pb.save()

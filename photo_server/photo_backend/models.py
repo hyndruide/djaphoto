@@ -6,12 +6,6 @@ from django.db import models
 Produit de base
 photo
 
-
-
-
-
-
-
 Client:
     Entreprise, association, famille
 
@@ -53,7 +47,6 @@ class PhotoBoothAdmin(admin.ModelAdmin):
 class PhotoBooth(models.Model):
 
     nom = models.CharField(max_length=50, blank=False)
-    sessionkey = models.CharField(max_length=64, blank=False)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -64,6 +57,36 @@ class PhotoBooth(models.Model):
 
 
 admin.site.register(PhotoBooth)
+
+
+class Authorization(models.Model):
+    client_id = models.CharField(max_length=255)
+    device_code = models.CharField(max_length=255)
+    user_code = models.CharField(max_length=255)
+    interval = models.IntegerField()
+    expires_in = models.IntegerField()
+    is_validate = models.BooleanField(default=False)
+    date_create = models.DateTimeField(auto_now_add=True)
+    date_ask = models.DateTimeField(auto_now=True)
+    photobooth = models.ForeignKey(PhotoBooth, null=True, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.client_id + str(self.is_validate)
+
+
+admin.site.register(Authorization)
+
+
+class Token(models.Model):
+    access_token = models.CharField(max_length=255)
+    refresh_token = models.CharField(max_length=255)
+    token_type = models.CharField(max_length=255)
+    expires = models.IntegerField()
+    date_create = models.DateTimeField(auto_now_add=True)
+    photobooth = models.ForeignKey(PhotoBooth, null=True, on_delete=models.CASCADE)
+
+
+admin.site.register(Token)
 
 
 class Photo(models.Model):

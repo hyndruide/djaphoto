@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %}ajout d'un photomaton{% endblock %}</title>
+</head>
+<body>
+
+<form action="/photobooth/validate/" method="post">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    {{ form }}
+    <input type="submit" value="Submit">
+</form>
+
+</body>
+</html>
