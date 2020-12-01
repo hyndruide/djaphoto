@@ -11,7 +11,7 @@ htmlcov/
 # runtime
 photo_server/media/
 *.sqlite3
-keyfile
+setting
 .coverage
 ma-photo1.jpg/
 photo1.jpg/

@@ -19,19 +19,19 @@ from django.urls import path
 from photo_backend.views import (
     first,
     photo_upload,
-    connexion,
-    new_connexion,
-    wait_connexion,
-    validate_connexion
+    connect_photobooth,
+    new_photobooth,
+    wait_photobooth,
+    validate_photobooth
 )
 
 
 urlpatterns = [
     path("", first),
     path("photo/upload", photo_upload),
-    path("connexion/", connexion),
-    path("connexion/new", new_connexion),
-    path("connexion/wait", wait_connexion),
-    path("photobooth/validate/", validate_connexion),
+    path("photobooth/connect", connect_photobooth),
+    path("photobooth/new", new_photobooth),
+    path("photobooth/wait", wait_photobooth),
+    path("photobooth/validate/", validate_photobooth),
     path("admin/", admin.site.urls),
 ]

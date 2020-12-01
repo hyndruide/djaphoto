@@ -33,22 +33,22 @@ def test_verify_checkum_bad_inputs():
     assert pos == fp.tell()
 
 
-def test_get_session_key_failure(rf):
+def test_get_access_token_failure(rf):
     url = "/"  # we don't care about the URL in this test
 
     request = rf.get(url)
     with pytest.raises(PermissionDenied):
-        utils.get_session_key(request)
+        utils.get_access_token(request)
 
     request = rf.get("/", HTTP_AUTHORIZATION="foobar")
     with pytest.raises(PermissionDenied):
-        utils.get_session_key(request)
+        utils.get_access_token(request)
 
     request = rf.get("/", HTTP_AUTHORIZATION="bearer")
     with pytest.raises(PermissionDenied):
-        utils.get_session_key(request)
+        utils.get_access_token(request)
 
 
-def test_get_session_key_success(rf):
+def test_get_access_token_success(rf):
     request = rf.get("/", HTTP_AUTHORIZATION="bearer toto")
-    assert "toto" == utils.get_session_key(request)
+    assert "toto" == utils.get_access_token(request)

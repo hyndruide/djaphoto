@@ -37,7 +37,7 @@ def verify_checksum(checksum, fp):
     return expected == computed
 
 
-def get_session_key(request):
+def get_access_token(request):
     authorization = request.headers.get("authorization", "")
     if authorization.startswith("bearer "):
         return authorization.split(" ", 1)[1]

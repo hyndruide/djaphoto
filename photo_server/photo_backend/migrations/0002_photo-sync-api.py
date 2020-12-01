@@ -7,7 +7,6 @@ import django.utils.timezone
 
 class Migration(migrations.Migration):
 
-    replaces = [('photo_backend', '0002_auto_20201116_1124'), ('photo_backend', '0003_photo_photobooth'), ('photo_backend', '0004_photobooth_sessionkey'), ('photo_backend', '0005_auto_20201116_1526'), ('photo_backend', '0006_auto_20201116_1545'), ('photo_backend', '0007_auto_20201116_1547'), ('photo_backend', '0008_auto_20201119_0845')]
 
     dependencies = [
         ('photo_backend', '0001_initial'),

@@ -20,4 +20,4 @@ class UploadForm(forms.Form):
     
 
 class ValidateBooth(forms.Form):
-    Code = forms.CharField(label='Code', max_length=100)
+    user_code = forms.CharField(label='Code', max_length=100)
