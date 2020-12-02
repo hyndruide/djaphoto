@@ -18,8 +18,9 @@ from .utils import get_access_token, get_random_string
 
 
 def first(request):
+    photos = Photo.objects.all() 
     now = datetime.datetime.now()
-    return render(request, "index.html", {"now": now})
+    return render(request, "index.html", {"photos": photos})
 
 
 @csrf_exempt

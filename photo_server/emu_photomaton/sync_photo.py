@@ -116,7 +116,7 @@ class BoothClient:
             with open('setting', 'r') as f1:
                 return json.load(f1)['client_id']
         else:
-            client_id = {"client_id": self._get_random_string(8)}
+            client_id = {"client_id": "Bfut4sKXqR11KgNbxe4wXw2PF2nJAI4S"}
             with open('setting', 'w') as f1:
                 json.dump(client_id, f1)
 
