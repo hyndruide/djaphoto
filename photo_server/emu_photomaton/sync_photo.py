@@ -76,7 +76,7 @@ class BoothClient:
             if not r.ok:
                 print(r.text)
                 return True
-      
+
             self.store_token(r.json())
             return False
 
