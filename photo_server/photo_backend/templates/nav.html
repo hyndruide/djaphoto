@@ -1,7 +1,14 @@
- <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Company name</a>
-        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> {% block login %} {% include 'login.html' %} {% endblock %}
-    </nav>
+<nav class="navbar navbar-dark shadow sticky-top bg-dark navbar-expand-lg p-0  ">
+    <a class="navbar-brand p0 col-md-3 col-lg-2 mr-0 px-3" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+        </ul>
+        {% block login %} {% include 'login.html' %} {% endblock %}
+
+    </div>
+</nav>

@@ -36,6 +36,7 @@ def first(request):
 
 @login_required
 def dashboard(request):
+    
     user = request.user
     auth0user = user.social_auth.get(provider='auth0')
     userdata = {
@@ -44,11 +45,12 @@ def dashboard(request):
         'picture': auth0user.extra_data['picture'],
         'email': auth0user.extra_data['email'],
     }
+    print(str(user))
     photos = Photo.objects.all()
     return render(request, 'index.html', {
         'auth0User': auth0user,
-        'userdata': json.dumps(userdata, indent=4),
-        'user':user,
+        'userdata': userdata,
+        'user': user,
         "photos": photos
     })
 
