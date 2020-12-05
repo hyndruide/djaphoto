@@ -6,21 +6,59 @@ from django.http import (
     JsonResponse,
     HttpResponseRedirect,
 )
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
 
 from .forms import UploadForm, ValidateBooth
 from .models import Client, Photo, PhotoBooth, Authorization, Token
 from .utils import get_access_token, get_random_string
 
+from django.contrib.auth import logout as log_out
+from django.conf import settings
+from urllib.parse import urlencode
+
+import json
+
 # Create your views here.
 
 
 def first(request):
-    photos = Photo.objects.all() 
-    now = datetime.datetime.now()
+    photos = Photo.objects.all()
+    user = request.user
+    if user.is_authenticated:
+        return redirect(dashboard)
+    else:
+        return render(request, 'index.html')
     return render(request, "index.html", {"photos": photos})
+
+
+@login_required
+def dashboard(request):
+    user = request.user
+    auth0user = user.social_auth.get(provider='auth0')
+    userdata = {
+        'user_id': auth0user.uid,
+        'name': user.first_name,
+        'picture': auth0user.extra_data['picture'],
+        'email': auth0user.extra_data['email'],
+    }
+    photos = Photo.objects.all()
+    return render(request, 'index.html', {
+        'auth0User': auth0user,
+        'userdata': json.dumps(userdata, indent=4),
+        'user':user,
+        "photos": photos
+    })
+
+
+def logout(request):
+    log_out(request)
+    return_to = urlencode({'returnTo': request.build_absolute_uri('/')})
+    logout_url = 'https://%s/v2/logout?client_id=%s&%s' % \
+                 (settings.SOCIAL_AUTH_AUTH0_DOMAIN, settings.SOCIAL_AUTH_AUTH0_KEY, return_to)
+    return HttpResponseRedirect(logout_url)
 
 
 @csrf_exempt

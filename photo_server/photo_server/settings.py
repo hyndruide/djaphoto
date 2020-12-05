@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'social_django',
     "photo_backend",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
 ]
 
 MIDDLEWARE = [
@@ -144,4 +146,22 @@ STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-AUTH_USER_MODEL = 'photo_backend.MyUser'
+
+SOCIAL_AUTH_TRAILING_SLASH = False  # Remove trailing slash from routes
+SOCIAL_AUTH_AUTH0_DOMAIN = 'hyndruide.eu.auth0.com'
+SOCIAL_AUTH_AUTH0_KEY = 'KA3az8kpA8l44315ysMmNlf4NmpNF8DI'
+SOCIAL_AUTH_AUTH0_SECRET = 'JJRnIY8ly8Os7ZpMIxcURthT40DeU8qYZ4NeFUMj0j4BL5pNkUewO7P0ImXNLtxf'
+
+SOCIAL_AUTH_AUTH0_SCOPE = [
+    'openid',
+    'profile',
+    'email'
+]
+
+AUTHENTICATION_BACKENDS = {
+    'photo_backend.auth0backend.Auth0',
+    'django.contrib.auth.backends.ModelBackend'
+}
+
+LOGIN_URL = '/login/auth0'
+LOGIN_REDIRECT_URL = '/'

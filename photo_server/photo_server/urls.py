@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -24,7 +24,10 @@ from photo_backend.views import (
     connect_photobooth,
     new_photobooth,
     wait_photobooth,
-    validate_photobooth
+    validate_photobooth,
+    logout,
+    dashboard
+
 )
 
 
@@ -36,4 +39,8 @@ urlpatterns = [
     path("photobooth/wait", wait_photobooth),
     path("photobooth/validate/", validate_photobooth),
     path("admin/", admin.site.urls),
+    path('dashboard/', dashboard),
+    path('logout/', logout),
+    path('', include('django.contrib.auth.urls')),
+    path('', include('social_django.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
