@@ -147,20 +147,14 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 
 SOCIAL_AUTH_TRAILING_SLASH = False  # Remove trailing slash from routes
-SOCIAL_AUTH_AUTH0_DOMAIN = 'hyndruide.eu.auth0.com'
-SOCIAL_AUTH_AUTH0_KEY = 'KA3az8kpA8l44315ysMmNlf4NmpNF8DI'
-SOCIAL_AUTH_AUTH0_SECRET = 'JJRnIY8ly8Os7ZpMIxcURthT40DeU8qYZ4NeFUMj0j4BL5pNkUewO7P0ImXNLtxf'
-
-SOCIAL_AUTH_AUTH0_SCOPE = [
-    'openid',
-    'profile',
-    'email'
-]
+SOCIAL_AUTH_COGNITO_POOL_DOMAIN = "https://djaphoto.auth.eu-west-3.amazoncognito.com"
+SOCIAL_AUTH_COGNITO_KEY = "5vju03cb0j2jh1f2amija8kva2"
+SOCIAL_AUTH_COGNITO_SECRET = "1cdjc0ka76qf2ce6n9cse18mrckiukj6snbartldgjd7tk9j2db9"
 
 AUTHENTICATION_BACKENDS = {
-    'social_core.backends.auth0.Auth0OAuth2',
-    'django.contrib.auth.backends.ModelBackend'
+    'photo_backend.oauth2.Cognito',
+    'django.contrib.auth.backends.ModelBackend',
 }
 
-LOGIN_URL = '/login/auth0'
+LOGIN_URL = '/login/cognito'
 LOGIN_REDIRECT_URL = '/'

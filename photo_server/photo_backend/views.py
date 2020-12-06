@@ -33,13 +33,15 @@ def first(request):
 @login_required
 def dashboard(request):
     user = request.user
-    identity = user.social_auth.get(provider='auth0')
+
+    identity = user.social_auth.get(provider="cognito")
     userdata = {
         'user_id': identity.uid,
         'name': user.first_name,
-        'picture': identity.extra_data['picture'],
-        'email': identity.extra_data['email'],
+        'picture': identity.extra_data["picture"],
+        'email': identity.extra_data["email"],
     }
+
     photos = Photo.objects.all()
     return render(request, 'index.html', {
         'userdata': userdata,
@@ -51,13 +53,14 @@ def dashboard(request):
 def logout(request):
     qs = urlencode(
         {
-            "client_id": settings.SOCIAL_AUTH_AUTH0_KEY,
-            "returnTo": request.build_absolute_uri('/')
+            "client_id": settings.SOCIAL_AUTH_COGNITO_KEY,
+            "logout_uri": request.build_absolute_uri('/')
         }
     )
-    base_url = f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}"
-    logout_url = f"{base_url}/v2/logout?{qs}"
+    base_url = settings.SOCIAL_AUTH_COGNITO_POOL_DOMAIN
+    logout_url = f"{base_url}/logout?{qs}"
     log_out(request)
+
     return HttpResponseRedirect(logout_url)
 
 
