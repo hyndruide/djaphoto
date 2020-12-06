@@ -19,36 +19,29 @@ from django.contrib.auth import logout as log_out
 from django.conf import settings
 from urllib.parse import urlencode
 
-import json
 
 # Create your views here.
 
 
 def first(request):
-    photos = Photo.objects.all()
-    user = request.user
-    if user.is_authenticated:
+    if request.user.is_authenticated:
         return redirect(dashboard)
     else:
         return render(request, 'index.html')
-    return render(request, "index.html", {"photos": photos})
 
 
 @login_required
 def dashboard(request):
-    
     user = request.user
-    auth0user = user.social_auth.get(provider='auth0')
+    identity = user.social_auth.get(provider='auth0')
     userdata = {
-        'user_id': auth0user.uid,
+        'user_id': identity.uid,
         'name': user.first_name,
-        'picture': auth0user.extra_data['picture'],
-        'email': auth0user.extra_data['email'],
+        'picture': identity.extra_data['picture'],
+        'email': identity.extra_data['email'],
     }
-    print(str(user))
     photos = Photo.objects.all()
     return render(request, 'index.html', {
-        'auth0User': auth0user,
         'userdata': userdata,
         'user': user,
         "photos": photos
@@ -56,10 +49,15 @@ def dashboard(request):
 
 
 def logout(request):
+    qs = urlencode(
+        {
+            "client_id": settings.SOCIAL_AUTH_AUTH0_KEY,
+            "returnTo": request.build_absolute_uri('/')
+        }
+    )
+    base_url = f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}"
+    logout_url = f"{base_url}/v2/logout?{qs}"
     log_out(request)
-    return_to = urlencode({'returnTo': request.build_absolute_uri('/')})
-    logout_url = 'https://%s/v2/logout?client_id=%s&%s' % \
-                 (settings.SOCIAL_AUTH_AUTH0_DOMAIN, settings.SOCIAL_AUTH_AUTH0_KEY, return_to)
     return HttpResponseRedirect(logout_url)
 
 
@@ -71,6 +69,7 @@ def connect_photobooth(request):
     response = JsonResponse({"valid": True})
     response.status_code = 200
     return response
+
 
 @csrf_exempt
 def new_photobooth(request):
@@ -104,7 +103,7 @@ def validate_photobooth(request):
             )
             photobooth.save()
             auth_for_photomaton = get_object_or_404(
-                Authorization, 
+                Authorization,
                 user_code=form.cleaned_data['user_code']
                 )
             auth_for_photomaton.is_validate = True
