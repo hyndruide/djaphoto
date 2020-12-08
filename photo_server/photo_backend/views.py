@@ -201,7 +201,7 @@ def photo_upload(request):
         filename = fs.save(name, fp)
 
         photo = Photo(
-            lien=filename,
+            photo=fp,
             date_create=created_at,
             photobooth=photomaton,
         )

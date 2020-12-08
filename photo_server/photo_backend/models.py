@@ -92,7 +92,7 @@ admin.site.register(Token)
 
 
 class Photo(models.Model):
-    lien = models.CharField(max_length=255)
+    photo = models.ImageField(upload_to='photo')
     date_upload = models.DateTimeField(auto_now_add=True)
     date_create = models.DateTimeField(blank=False)
     photobooth = models.ForeignKey(PhotoBooth, on_delete=models.CASCADE)
@@ -102,7 +102,7 @@ class Photo(models.Model):
 
         local_tz = pytz.timezone("Europe/Paris")
         when = self.date_create.astimezone(local_tz).strftime("%d/%m/%Y, %H:%M:%S %Z")
-        return self.lien + " " + when
+        return self.photo.name + " " + when
 
 
 admin.site.register(Photo)
