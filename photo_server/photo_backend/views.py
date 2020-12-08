@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
 from .forms import UploadForm, ValidateBooth
-from .models import Client, Photo, PhotoBooth, Authorization, Token
+from .models import Client, Photo, PhotoBooth, Authorization, Token, Profile
 from .utils import get_access_token, get_random_string
 
 from django.contrib.auth import logout as log_out
@@ -34,11 +34,13 @@ def first(request):
 def dashboard(request):
     user = request.user
     identity = user.social_auth.get(provider='auth0')
+
+
     userdata = {
         'user_id': identity.uid,
         'name': user.first_name,
         'picture': identity.extra_data['picture'],
-        'email': identity.extra_data['email'],
+        'email': user.email,
     }
     photos = Photo.objects.all()
     return render(request, 'index.html', {
@@ -85,28 +87,31 @@ def new_photobooth(request):
     response = JsonResponse({
         "device_code": auth_for_photomaton.device_code,
         "user_code": auth_for_photomaton.user_code[:4] + "-" + auth_for_photomaton.user_code[4:],
-        "verification_uri": "http://127.0.0.1/photobooth/validate/",
+        "verification_uri": "http://localhost:8000/photobooth/validate/",
         "interval": auth_for_photomaton.interval,
         "expires_in": auth_for_photomaton.expires_in
     })
     response.status_code = 200
     return response
 
-
+@login_required
 def validate_photobooth(request):
     if request.method == 'POST':
         form = ValidateBooth(request.POST)
         if form.is_valid():
-            photobooth = PhotoBooth(
-                nom="nouveau_photbooth",
-                client=Client.objects.get(pk=1)
-            )
-            photobooth.save()
+            profile = Profile.objects.get(user=request.user )
+
             auth_for_photomaton = get_object_or_404(
                 Authorization,
                 user_code=form.cleaned_data['user_code']
                 )
             auth_for_photomaton.is_validate = True
+
+            photobooth = PhotoBooth(
+                nom="nouveau_photbooth",
+                client=profile.client
+            )
+            photobooth.save()
             auth_for_photomaton.photobooth = photobooth
             auth_for_photomaton.save()
 
