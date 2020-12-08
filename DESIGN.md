@@ -106,3 +106,15 @@ Raspberry Pi 4 (ARM) ou ordinateur Atom (x86):
 ## question?
     - peut-on enlever La GUI de base (gnome ou autre...) sur linux pour ameliorer la
     vitesse du pc
+
+
+
+
+## idée :
+    gérer plusieur utilisateur avec un seul client.
+    crée un system d'event pour definir des tags pour les photos
+    gérer les template de photo maton
+    ajouter de fausse photo dans le faux photomaton
+
+## probleme possibble :
+    trop de photo envoyer en meme temps
