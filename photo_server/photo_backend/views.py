@@ -1,6 +1,5 @@
 import datetime
 
-from django.core.files.storage import FileSystemStorage
 from django.http import (
     HttpResponseBadRequest,
     JsonResponse,
@@ -12,7 +11,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
 from .forms import UploadForm, ValidateBooth
-from .models import Client, Photo, PhotoBooth, Authorization, Token, Profile
+from .models import Photo, PhotoBooth, Authorization, Token, Profile
 from .utils import get_access_token, get_random_string
 
 from django.contrib.auth import logout as log_out
@@ -34,7 +33,6 @@ def first(request):
 def dashboard(request):
     user = request.user
     identity = user.social_auth.get(provider='auth0')
-
 
     userdata = {
         'user_id': identity.uid,
@@ -94,12 +92,13 @@ def new_photobooth(request):
     response.status_code = 200
     return response
 
+
 @login_required
 def validate_photobooth(request):
     if request.method == 'POST':
         form = ValidateBooth(request.POST)
         if form.is_valid():
-            profile = Profile.objects.get(user=request.user )
+            profile = Profile.objects.get(user=request.user)
 
             auth_for_photomaton = get_object_or_404(
                 Authorization,
@@ -196,9 +195,6 @@ def photo_upload(request):
         fp = form.cleaned_data["file"]
         created_at = form.cleaned_data["created_at"]
         name = form.cleaned_data["name"]
-
-        fs = FileSystemStorage(name)
-        filename = fs.save(name, fp)
 
         photo = Photo(
             photo=fp,

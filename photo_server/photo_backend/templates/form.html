@@ -1,15 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>{% block title %}ajout d'un photomaton{% endblock %}</title>
-</head>
-<body>
+<div class="modal-header">
+    <h5 class="modal-title">Ajouter un photo booth</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
 
-<form action="/photobooth/validate/" method="post">
-    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-    {{ form }}
-    <input type="submit" value="Submit">
+<div class="modal-body">
+    <form action="{{ url('validpb') }}" method="post" id="form-add-pb">
+        {% for field in form %}
+        <div class="form-group{% if field.errors %} invalid{% endif %}">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label> {{ field }} {% for error in field.errors %}
+            <p class="help-block">{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endfor %}
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-primary">Ajouter</button>
+</div>
 </form>
-
-</body>
-</html>

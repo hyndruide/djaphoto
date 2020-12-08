@@ -37,7 +37,7 @@ urlpatterns = [
     path("photobooth/connect", connect_photobooth),
     path("photobooth/new", new_photobooth),
     path("photobooth/wait", wait_photobooth),
-    path("photobooth/validate/", validate_photobooth,name='validate_photobooth'),
+    path("photobooth/validate/", validate_photobooth, name='validpb'),
     path("admin/", admin.site.urls),
     path('dashboard/', dashboard),
     path('logout/', logout),
