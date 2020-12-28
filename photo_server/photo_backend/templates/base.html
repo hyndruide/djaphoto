@@ -40,32 +40,32 @@
 </head>
 {% endblock %}
 {% block body %}
-<body>
-   {% block nav %}
+    <body>
+    {% block nav %}
     {% endblock %}
-    <div class="container-fluid">
-        <div class="row">
-            {% block sidemenu %}
-            {% endblock %}
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-                
-            {% block main %}
-            {% endblock %}
+        <div class="container-fluid">
+            <div class="row">
+                {% block sidemenu %}
+                {% endblock %}
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+                    
+                {% block main %}
+                {% endblock %}
 
 
-            </main>
+                </main>
+            </div>
         </div>
+          <div class="modal fade" id="modalview" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content modalview-content"></div>
     </div>
-
-{% block modal %}
-
-{% endblock %}
-
-
-{%block script %}
-{% endblock %}
-</body>
-
+  </div>
+    {% block modal %}
+    {% endblock %}
+    {%block script %}
+    {% endblock %}
+    </body>
 {% endblock %}
 
 </html>

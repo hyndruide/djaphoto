@@ -9,20 +9,43 @@
         feather.replace();
         $(".dropdown-toggle").dropdown();
 
-        $("#ajoutepb").click(function() {
-            $.ajax({
-                url: "{{ url('validpb') }}",
-                success: function(result) {
-                    $(".modalview-content").html(result);
-                    console.log("coucou");
+        $("#modalview").on("show.bs.modal", function(e) {
+            var link = $(e.relatedTarget);
+            // Place the returned HTML into the selected element
+            $(this).find(".modalview-content").load(link.attr("href"));
+        });
+
+        $('#modalview').on("keydown", '#id_user_code', function(event) {
+            console.log(event.keyCode);
+            if ($(this).val().length === 4) {
+                if (event.keyCode !== 54 && event.keyCode !== 109) {
+                    $(this).val($(this).val() + "-");
+                }
+                if (event.keyCode === 8) {
+                    $(this).val($(this).val().slice(0, -1));
+                }
+            }
+        });
+
+        $("#modalview").on("submit", 'form', function(event) {
+            console.log($(this).serialize());
+            jQuery.ajax({
+                type: "POST",
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function(res, e, t) {
+                    if (res === '') {
+                        $('#modalview').modal('hide');
+                    } else $("#modalview").find(".modalview-content").html(res);
+                },
+                error: function(x, t, e) {
+                    console.log(e)
+                    $("#modalview").find(".modalview-content").load($(this).attr('action'));
                 }
             });
-        });
+            event.preventDefault();
 
-        $("#form-add-pb").submit(function(event) {
-            print("coucou");
         });
-
 
     });
 

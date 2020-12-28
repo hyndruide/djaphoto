@@ -26,7 +26,9 @@ from photo_backend.views import (
     wait_photobooth,
     validate_photobooth,
     logout,
-    dashboard
+    dashboard,
+    modify_photobooth,
+    photobooth_view
 
 )
 
@@ -34,12 +36,14 @@ from photo_backend.views import (
 urlpatterns = [
     path("", first),
     path("photo/upload", photo_upload),
+    path("dashboard/photobooth", photobooth_view, name='photobooth_view'),
     path("photobooth/connect", connect_photobooth),
     path("photobooth/new", new_photobooth),
     path("photobooth/wait", wait_photobooth),
     path("photobooth/validate/", validate_photobooth, name='validpb'),
+    path("photobooth/modify/", modify_photobooth, name='modifypb'),
     path("admin/", admin.site.urls),
-    path('dashboard/', dashboard),
+    path('dashboard/', dashboard,name='dashboard'),
     path('logout/', logout),
     path('', include('django.contrib.auth.urls')),
     path('', include('social_django.urls', namespace="social")),

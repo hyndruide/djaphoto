@@ -8,6 +8,21 @@ body {
     vertical-align: text-bottom;
 }
 
+.photobooth {
+    margin-bottom: 15px;
+}
+
+.photobooth h5 {
+    display: inline;
+}
+
+.button_pb {
+    display: flex;
+    float: right;
+}
+
+.button_pb button {}
+
 
 /*
    * Sidebar
@@ -139,4 +154,43 @@ $bootstrap-xl: 1200px;
             height: 350px;
         }
     }
+}
+
+.img-container {
+    position: relative;
+    display: inline-block;
+}
+
+.img-container .overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20%;
+    background: rgb(255, 255, 255);
+    opacity: 0;
+    transition: opacity 500ms ease-in-out;
+}
+
+.img-container:hover .overlay {
+    opacity: 0.8;
+}
+
+.overlay span {
+    color: rgb(0, 0, 0);
+    display: inline;
+    float: right;
+}
+
+.overlay span {
+    color: rgb(46, 46, 46);
+    display: inline;
+    float: right;
+}
+
+.overlay span.left {
+    color: rgb(0, 0, 0);
+    display: inline;
+    float: left;
+    font-weight: 400;
 }

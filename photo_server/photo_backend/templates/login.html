@@ -7,7 +7,7 @@
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="#">Paramétres</a>
-            <a class="dropdown-item" data-toggle="modal" data-target=".modalview" id="ajoutepb">ajouter un photo booth</a>
+            <a class="dropdown-item" href="{{ url('validpb') }}" data-toggle="modal" data-target="#modalview" id="ajoutepb">ajouter un photo booth</a>
             <div class="dropdown-divider"></div>
             {% if user.is_superuser %}
             <a class="dropdown-item" href="{{ url('admin:index') }}">Administration</a>

@@ -14,12 +14,8 @@
 {% endblock %}
 
 {% block modal %}
-{% include 'modal_photo.html'%}
-<div class="modal fade modalview" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content modalview-content"></div>
-  </div>
-</div>
+  {% include 'modal_photo.html'%}
+
 {% endblock %}
 
 {%block script%}

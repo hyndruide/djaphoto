@@ -25,7 +25,7 @@ SECRET_KEY = "kb9o!vn&r$f#))j5mvt&6i_l!-elq2l9!od4#8+0()7^@7ch*$"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','localhost','192.168.1.23']
 
 
 # Application definition
@@ -150,6 +150,7 @@ SOCIAL_AUTH_TRAILING_SLASH = False  # Remove trailing slash from routes
 SOCIAL_AUTH_AUTH0_DOMAIN = 'hyndruide.eu.auth0.com'
 SOCIAL_AUTH_AUTH0_KEY = 'KA3az8kpA8l44315ysMmNlf4NmpNF8DI'
 SOCIAL_AUTH_AUTH0_SECRET = 'JJRnIY8ly8Os7ZpMIxcURthT40DeU8qYZ4NeFUMj0j4BL5pNkUewO7P0ImXNLtxf'
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 SOCIAL_AUTH_AUTH0_SCOPE = [
     'openid',
