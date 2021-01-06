@@ -25,7 +25,7 @@ SECRET_KEY = "kb9o!vn&r$f#))j5mvt&6i_l!-elq2l9!od4#8+0()7^@7ch*$"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','192.168.1.23']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','photo.hyndruide.fr']
 
 
 # Application definition

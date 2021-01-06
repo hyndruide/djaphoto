@@ -21,5 +21,5 @@ def test_sync_photo(client, init_db):
             "file": fp,
         }
 
-        response = client.post("/photo/upload", data, HTTP_AUTHORIZATION=auth)
+        response = client.post("/api/upload", data, HTTP_AUTHORIZATION=auth)
         assert 201 == response.status_code

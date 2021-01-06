@@ -14,35 +14,28 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, re_path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
 from photo_backend.views import (
     first,
-    photo_upload,
-    connect_photobooth,
-    new_photobooth,
-    wait_photobooth,
-    validate_photobooth,
+
     logout,
     dashboard,
-    modify_photobooth,
-    photobooth_view
-
+    photobooth_view,
+    validate_photobooth,
+    modify_photobooth
 )
 
 
 urlpatterns = [
     path("", first),
-    path("photo/upload", photo_upload),
+    path("api/", include('photo_backend.api.urls')),
     path("dashboard/photobooth", photobooth_view, name='photobooth_view'),
-    path("photobooth/connect", connect_photobooth),
-    path("photobooth/new", new_photobooth),
-    path("photobooth/wait", wait_photobooth),
+    path("admin/", admin.site.urls),
     path("photobooth/validate/", validate_photobooth, name='validpb'),
     path("photobooth/modify/", modify_photobooth, name='modifypb'),
-    path("admin/", admin.site.urls),
     path('dashboard/', dashboard,name='dashboard'),
     path('logout/', logout),
     path('', include('django.contrib.auth.urls')),

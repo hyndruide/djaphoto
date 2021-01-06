@@ -9,10 +9,12 @@ import string
 
 
 class BoothClient:
-    def __init__(self, url='http://127.0.0.1:8000'):
+    def __init__(self, url='https://photo.hyndruide.fr'):
         self.url = url
         self.token = None
         self.client_id = self._get_client_id()
+        self.req = ''
+
 
     @staticmethod
     def _checksum(fp):
@@ -47,7 +49,7 @@ class BoothClient:
                 "Authorization": f"{self.token['token_type']} {self.token['access_token']}",
             }
 
-            url = f"{self.url}/photo/upload"
+            url = f"{self.url}/api/upload"
 
             files = [("file", fp)]
             with requests.post(url, data=data, files=files, headers=headers) as r:
@@ -55,22 +57,27 @@ class BoothClient:
                     raise ValueError(r.text)
                 return r.json()
 
-    def _first_connect(self):
-        url = f"{self.url}/photobooth/new"
+    def first_connect(self):
+        url = f"{self.url}/api/new"
         data = {
             "client_id": self.client_id,
         }
-        with requests.post(url, data=data) as r:
-            if not r.ok:
-                raise ValueError(r.text)
-            return r.json()
+        try:
+            with requests.post(url, data=data, timeout=0.2) as r:
+                if not r.ok:
+                    raise ValueError(r.text)
+                self.req = r.json()
+        except requests.exceptions.ConnectionError:
+            raise ConnectionError("impossible de se connecter")
+        except requests.exceptions.Timeout:
+            raise RetryError()
 
-    def wait_first_connect(self, data):
-        url = f"{self.url}/photobooth/wait"
+    def ask_first_connect(self):
+        url = f"{self.url}/api/wait"
         dt = {
                 "grant_type": "",
                 "client_id": self.client_id,
-                "device_code": data['device_code']
+                "device_code": self.req['device_code']
             }
         with requests.post(url, data=dt) as r:
             if not r.ok:
@@ -80,30 +87,36 @@ class BoothClient:
             self.store_token(r.json())
             return False
 
+    def wait_for_first_connect(self):
+        while self.ask_first_connect():
+            time.sleep(5)
+
     def connect(self):
         if self.update_token() is False:
             return False
-        url = f"{self.url}/photobooth/connect"
+        url = f"{self.url}/api/connect"
         headers = {
             "Authorization": f"{self.token['token_type']} {self.token['access_token']}",
         }
-
-        with requests.post(url, headers=headers) as r:
-            if not r.ok:
-                raise ValueError(r.text)
-            return r.json()
+        try:
+            with requests.post(url, headers=headers) as r:
+                if not r.ok:
+                    raise ValueError(r.text)
+                return r.json()      
+        except requests.exceptions.ConnectionError:
+            raise ConnectionError("impossible de se connecter")
 
     def store_token(self, token):
-        with open('setting', 'r') as f1:
+        with open('./photobooth/json/key', 'r') as f1:
             setting_file = json.load(f1)
         setting_file['token'] = token
-        with open('setting', 'w') as f1:
+        with open('./photobooth/json/key', 'w') as f1:
             json.dump(setting_file, f1)
         self.update_token()
 
     def _get_token(self):
-        if os.path.isfile('setting'):
-            with open('setting', 'r') as f1:
+        if os.path.isfile('./photobooth/json/key'):
+            with open('./photobooth/json/key', 'r') as f1:
                 setting_file = json.load(f1)
                 if 'token' not in setting_file:
                     return None
@@ -112,13 +125,16 @@ class BoothClient:
             return None
 
     def _get_client_id(self):
-        if os.path.isfile('setting'):
-            with open('setting', 'r') as f1:
-                return json.load(f1)['client_id']
+        if os.path.isfile('./photobooth/json/key'):
+            with open('./photobooth/json/key', 'r') as f1:
+                client_id_value = json.load(f1)['client_id']
         else:
             client_id = {"client_id": "Bfut4sKXqR11KgNbxe4wXw2PF2nJAI4S"}
-            with open('setting', 'w') as f1:
+            with open('./photobooth/json/key', 'w') as f1:
                 json.dump(client_id, f1)
+            client_id_value = client_id["client_id"]
+        return client_id_value
+        
 
     def update_token(self):
         token = self._get_token()
@@ -129,8 +145,6 @@ class BoothClient:
 
 if __name__ == "__main__":
     photo = BoothClient()
-    r = photo._first_connect()
+    r = photo.connect()
     print(r)
-    while photo.wait_first_connect(r):
-        time.sleep(r['interval'])
-    print("photomaton validé")
+
