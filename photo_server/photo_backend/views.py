@@ -23,11 +23,11 @@ from urllib.parse import urlencode
 # Create your views here.
 
 
-def first(request):
+def welcome(request):
     if request.user.is_authenticated:
         return redirect(dashboard)
     else:
-        return render(request, 'index.html')
+        return render(request, 'vitrine.html')
 
 @login_required
 def photobooth_view(request):

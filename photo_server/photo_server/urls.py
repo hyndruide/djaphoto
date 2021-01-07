@@ -19,7 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from photo_backend.views import (
-    first,
+    welcome,
 
     logout,
     dashboard,
@@ -30,14 +30,14 @@ from photo_backend.views import (
 
 
 urlpatterns = [
-    path("", first),
+    path("", welcome),
     path("api/", include('photo_backend.api.urls')),
-    path("dashboard/photobooth", photobooth_view, name='photobooth_view'),
-    path("admin/", admin.site.urls),
+    path('dashboard/', dashboard,name='dashboard'),
+    path("photobooth/", photobooth_view, name='photobooth_view'),
     path("photobooth/validate/", validate_photobooth, name='validpb'),
     path("photobooth/modify/", modify_photobooth, name='modifypb'),
-    path('dashboard/', dashboard,name='dashboard'),
     path('logout/', logout),
+    path("admin/", admin.site.urls),
     path('', include('django.contrib.auth.urls')),
     path('', include('social_django.urls', namespace="social")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
