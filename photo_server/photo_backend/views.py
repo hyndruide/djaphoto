@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
 from .forms import ValidateBooth, PhotoBoothForm
-from .models import Photo, PhotoBooth, Authorization, Token, Profile
+from .models import Photo, PhotoBooth, Authorization, Token, Profile, Pb_Template
 from .utils import get_access_token, get_random_string
 
 from django.contrib.auth import logout as log_out
@@ -109,6 +109,7 @@ def validate_photobooth(request):
 
             photobooth = PhotoBooth(
                 nom="nouveau_photbooth",
+                template = Pb_Template.objects.get(pk=1),
                 client=profile.client
             )
             photobooth.save()
@@ -124,3 +125,25 @@ def validate_photobooth(request):
     else:
         form = ValidateBooth()
         return render(request, 'form.html', {'form': form})
+
+@login_required
+def maintenance_photobooth_change(request,idbooth,active):
+    photobooth = PhotoBooth.objects.get(pk=idbooth)
+
+    if active : 
+        photobooth.update = False
+        photobooth.maintenance = False
+        photobooth.save()
+        return HttpResponse(status=200)
+    else:
+        return render(request, 'form_maintenance.html', {'photobooth': photobooth})
+
+@login_required
+def maintenance_photobooth(request):
+    if request.method == 'POST':
+        photobooth = PhotoBooth.objects.get(pk=request.POST['id_photobooth'])
+        if request.POST['password'] == "aqwxcdez":
+            photobooth.update = False
+            photobooth.maintenance = True
+            photobooth.save()
+    return HttpResponse(status=200)

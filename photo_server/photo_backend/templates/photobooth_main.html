@@ -15,7 +15,10 @@
     <div class=" btn-group mr-2 button_pb">
     <button type="button" class="btn btn-sm btn-outline-dark"><span data-feather="settings"></span></button>
     <button type="button" class="btn btn-sm btn-outline-dark"><span data-feather="image"></span></button>
+    <button type="button" href="maintenance/{{pb.pk}}/{% if pb.maintenance %}1{% else %}0{% endif %}" idbooth="{{pb.pk}}" data-toggle="modal" data-target="#modalview" class="maintenance btn btn-sm btn-outline-dark {% if pb.maintenance %} active {% endif %}"><span data-feather="command"></span></button>
   </div>
   </div>
 </div>
 {% endfor %}
+
+

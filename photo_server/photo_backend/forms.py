@@ -19,8 +19,8 @@ class ValidateBooth(forms.Form):
             raise ValidationError("Ce code n'existe pas")
         return data.replace("-", "")
 
-
 class PhotoBoothForm(ModelForm):
     class Meta:
         model = PhotoBooth
         fields = ['nom']
+

@@ -45,11 +45,23 @@ admin.site.register(Client)
 class PhotoBoothAdmin(admin.ModelAdmin):
     pass
 
+class Pb_Template(models.Model):
+
+    nom = models.CharField(max_length=50, blank=False)
+    template = models.JSONField()
+    
+    def __str__(self):
+        return self.nom
+
+admin.site.register(Pb_Template)
 
 class PhotoBooth(models.Model):
 
     nom = models.CharField(max_length=50, blank=False)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    update = models.BooleanField(blank=False,default=True)
+    maintenance = models.BooleanField(blank=False,default=False)
+    template = models.ForeignKey(Pb_Template,on_delete=models.RESTRICT)
 
     def __str__(self):
         return self.nom
@@ -87,7 +99,6 @@ class Token(models.Model):
     date_create = models.DateTimeField(auto_now_add=True)
     photobooth = models.ForeignKey(PhotoBooth, null=True, on_delete=models.CASCADE)
 
-
 admin.site.register(Token)
 
 
@@ -104,7 +115,6 @@ class Photo(models.Model):
         when = self.date_create.astimezone(local_tz).strftime("%d/%m/%Y, %H:%M:%S %Z")
         return self.photo.name + " " + when
 
-
 admin.site.register(Photo)
 
 
@@ -113,3 +123,5 @@ class Profile(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
 admin.site.register(Profile)
+
+

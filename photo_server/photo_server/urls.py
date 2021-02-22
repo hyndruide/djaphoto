@@ -25,7 +25,9 @@ from photo_backend.views import (
     dashboard,
     photobooth_view,
     validate_photobooth,
-    modify_photobooth
+    modify_photobooth,
+    maintenance_photobooth,
+    maintenance_photobooth_change
 )
 
 
@@ -36,6 +38,8 @@ urlpatterns = [
     path("photobooth/", photobooth_view, name='photobooth_view'),
     path("photobooth/validate/", validate_photobooth, name='validpb'),
     path("photobooth/modify/", modify_photobooth, name='modifypb'),
+    path("photobooth/maintenance/<int:idbooth>/<int:active>", maintenance_photobooth_change),
+    path("photobooth/maintenance/", maintenance_photobooth, name='maintenance'),
     path('logout/', logout),
     path("admin/", admin.site.urls),
     path('', include('django.contrib.auth.urls')),

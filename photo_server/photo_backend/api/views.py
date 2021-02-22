@@ -20,6 +20,7 @@ from django.contrib.auth import logout as log_out
 from django.conf import settings
 from urllib.parse import urlencode
 
+from .settingsk import passdb
 
 
 @csrf_exempt
@@ -144,4 +145,31 @@ def photo_upload(request):
     else:
         return HttpResponseBadRequest(form.errors)
 
+
+def is_update_photobooth(request):
+    access_token = get_access_token(request)
+    token = get_object_or_404(Token, access_token=access_token)
+    photomaton = token.photobooth
+    print(photomaton.nom)
+    response = JsonResponse({
+        "update": photomaton.update
+    })
+    response.status_code = 200
+    return response
+
+def update_photobooth(request):
+    data_reponse = {}
+    access_token = get_access_token(request)
+    token = get_object_or_404(Token, access_token=access_token)
+    photomaton = token.photobooth
+    data_reponse["maintenance"] = photomaton.maintenance
+    if photomaton.maintenance == True:
+        data_reponse['password'] = passdb
+    if photomaton.update == False:
+        data_reponse['template_update'] = photomaton.template.template
+    response = JsonResponse(data_reponse)
+    photomaton.update = True
+    photomaton.save()
+    response.status_code = 200
+    return response
 
